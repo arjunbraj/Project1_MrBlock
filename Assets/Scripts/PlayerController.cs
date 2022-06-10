@@ -6,30 +6,49 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rigid_body2D;
     
-    public float speed;
+    private float speed = 0;
+    private float maxspeed = 5;
+    private float acceleration = 10;
+    private float deceleration = 10;
     
 
     void Update()
     {
-        if(Input.GetAxis("Horizontal") > 0) //right
+        if(Input.GetAxis("Horizontal") > 0 && speed < maxspeed) //right
         {
+            speed = speed + acceleration * Time.deltaTime;
             rigid_body2D.velocity = new Vector2(speed, 0f);
         }
-        else if (Input.GetAxis("Horizontal") < 0) //left
+        else if (Input.GetAxis("Horizontal") < 0 && speed > -maxspeed) //left
         {
-            rigid_body2D.velocity = new Vector2(-speed, 0f);
+            speed = speed - acceleration * Time.deltaTime;
+            rigid_body2D.velocity = new Vector2(speed, 0f);
         }
-        else if (Input.GetAxis("Vertical") > 0) //up
+        else if (Input.GetAxis("Vertical") > 0 && speed < maxspeed) //up
         {
+            speed = speed + acceleration * Time.deltaTime;
             rigid_body2D.velocity = new Vector2(0f, speed);
         }
-        else if (Input.GetAxis("Vertical") < 0) //down
+        else if (Input.GetAxis("Vertical") < 0 && speed > -maxspeed) //down
         {
-            rigid_body2D.velocity = new Vector2(0f, -speed);
+            speed = speed - acceleration * Time.deltaTime;
+            rigid_body2D.velocity = new Vector2(0f, speed);
         }
         else if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0) //stop
         {
             rigid_body2D.velocity = new Vector2(0f, 0f);
+        }
+        if(Input.GetKey("space"))
+        {
+            if (speed > deceleration * Time.deltaTime)
+                speed = speed - deceleration * Time.deltaTime;
+            else if (speed < -deceleration * Time.deltaTime)
+                speed = speed + deceleration * Time.deltaTime;
+            else
+            {
+                speed = 0;
+            }
+                
         }
     }
 
