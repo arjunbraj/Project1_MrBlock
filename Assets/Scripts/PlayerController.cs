@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rigid_body2D;
     public GameObject gameWonPanel;
-    
+    public GameObject pausePanel;
+
     private float speed = 0;
     private float maxspeed = 5;
     private float acceleration = 10;
@@ -39,19 +40,25 @@ public class PlayerController : MonoBehaviour
             speed = speed - acceleration * Time.deltaTime;
             rigid_body2D.velocity = new Vector2(0f, speed);
         }
-        if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0) //stop
-        {
-            rigid_body2D.velocity = new Vector2(0f, 0f);
-        }
-        if(Input.GetKey("space"))
+        else if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0) //stop
         {
             if (speed > deceleration * Time.deltaTime)
                 speed = speed - deceleration * Time.deltaTime;
             else if (speed < -deceleration * Time.deltaTime)
                 speed = speed + deceleration * Time.deltaTime;
             else
-                speed = 0;
+                rigid_body2D.velocity = new Vector2(0f, 0f); ;
+        }
+        else if(Input.GetKey("space"))
+        {
+            rigid_body2D.velocity = new Vector2(0f, 0f);
+            
                 
+        }
+        if(Input.GetKey("escape"))
+        {
+            pausePanel.SetActive(true);
+            isGameWon = true;
         }
     }
 
